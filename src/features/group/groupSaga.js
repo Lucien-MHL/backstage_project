@@ -48,7 +48,7 @@ function* groupPost({ payload }) {
 function* groupPut({ payload }) {
   try {
     const url = `/api/group/${payload.gid}`
-    const AzureURL = '/api/Azure_Cloud/photos/groupPhotos'
+    const AzureURL = '/api/Azure_Cloud/photos/photo'
     const data = new FormData(payload.formData)
     let Response = {}
 

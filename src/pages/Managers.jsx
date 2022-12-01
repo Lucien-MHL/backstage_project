@@ -18,16 +18,6 @@ import FormForAddManager from '../components/FormForAddManager.jsx'
 import VerifyLayout from '../components/VerifyLayout.jsx'
 import Modal from '../components/Modal.jsx'
 
-const Main = styled.main`
-  margin-top: 2rem;
-  padding: 1rem;
-  max-height: calc(100% - 64px - 2rem);
-  min-height: 232px;
-  border: 2px solid ${({ theme }) => theme.secondary};
-  border-radius: 1.5rem;
-  display: flex;
-  flex-direction: column;
-`
 const Header = styled.article`
   width: 100%;
   display: flex;
@@ -235,50 +225,48 @@ function Managers() {
       <FormForAddManager />
       {/* ↑ 新增管理員的表單 */}
 
-      <Main>
-        <Header>
-          <SearchBar onSubmit={(e) => e.preventDefault()}>
-            <SearchIcon icon={faMagnifyingGlass} />
-            <Input
-              type='text'
-              placeholder='輸入關鍵字...'
-              ref={keyword}
-              onChange={handleSearch}
-            />
-          </SearchBar>
+      <Header>
+        <SearchBar onSubmit={(e) => e.preventDefault()}>
+          <SearchIcon icon={faMagnifyingGlass} />
+          <Input
+            type='text'
+            placeholder='輸入關鍵字...'
+            ref={keyword}
+            onChange={handleSearch}
+          />
+        </SearchBar>
 
-          <PlusButton onClick={() => dispatch(modalToggle())}>
-            <PlusIcon icon={faPlus} />
-            新增
-          </PlusButton>
-        </Header>
-        <Table>
-          <TableHeader>
-            <Title>名稱</Title>
-            <Title>帳號</Title>
-            <Title>信箱</Title>
-            <Title>內容</Title>
-          </TableHeader>
-          <TableBody>
-            {list?.map((item, index) => (
-              <List key={index} isDark={isDark}>
-                <Text>{item.name}</Text>
-                <Text>{item.account}</Text>
-                <Text>{item.email}</Text>
-                <Text>
-                  <Detail
-                    to={`${item.id}`}
-                    onClick={() => dispatch(handleClickModify(item))}
-                  >
-                    <EditIcon icon={faPenToSquare} />
-                    <Font>修改</Font>
-                  </Detail>
-                </Text>
-              </List>
-            ))}
-          </TableBody>
-        </Table>
-      </Main>
+        <PlusButton onClick={() => dispatch(modalToggle())}>
+          <PlusIcon icon={faPlus} />
+          新增
+        </PlusButton>
+      </Header>
+      <Table>
+        <TableHeader>
+          <Title>名稱</Title>
+          <Title>帳號</Title>
+          <Title>信箱</Title>
+          <Title>內容</Title>
+        </TableHeader>
+        <TableBody>
+          {list?.map((item, index) => (
+            <List key={index} isDark={isDark}>
+              <Text>{item.name}</Text>
+              <Text>{item.account}</Text>
+              <Text>{item.email}</Text>
+              <Text>
+                <Detail
+                  to={`${item.id}`}
+                  onClick={() => dispatch(handleClickModify(item))}
+                >
+                  <EditIcon icon={faPenToSquare} />
+                  <Font>修改</Font>
+                </Detail>
+              </Text>
+            </List>
+          ))}
+        </TableBody>
+      </Table>
     </VerifyLayout>
   )
 }

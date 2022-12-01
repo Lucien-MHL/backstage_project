@@ -54,7 +54,8 @@ const initialState = {
   },
   userModify: {
     user: null,
-    menu: ['個人資料', '基本設定', '重設密碼', '圖片設定', '歷史紀錄'],
+    menu: ['個人資料', '基本設定', '重設密碼', '圖片設定'],
+    // menu: ['個人資料', '基本設定', '重設密碼', '圖片設定', '歷史紀錄'],
     active: 0,
     isLoading: false,
     dropMenu: {},

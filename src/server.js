@@ -211,6 +211,36 @@ export function makeServer({ environment = 'test' } = {}) {
         }
       })
 
+      this.get('/station', (schema, request) => {
+        try {
+          // const { gid, uid } = request.params
+          // const isVerify = checkIdentify(schema, request)
+          // if (isVerify) {
+          //   const group = schema.groups.find(gid)
+          //   return {
+          //     success: true,
+          //     result: {
+          //       group,
+          //       users: group.users.filter((item) => item.attrs.id === uid).models[0]
+          //     },
+          //     message: ''
+          //   }
+          // } else {
+          //   return new Response(401, {}, { success: false, message: '身分驗證有誤' })
+          // }
+          return {
+            success: true,
+            // result: {
+            //   group,
+            //   users: group.users.filter((item) => item.attrs.id === uid).models[0]
+            // },
+            message: ''
+          }
+        } catch (error) {
+          return new Response(400, {}, { success: false, message: error.message })
+        }
+      })
+
       this.post('/login', (schema, request) => {
         const {
           requestBody: { account, password }

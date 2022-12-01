@@ -13,13 +13,6 @@ import {
   faFolderClosed
 } from '@fortawesome/free-solid-svg-icons'
 
-const Main = styled.main`
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.75rem 4%;
-  margin-top: 2rem;
-`
 const Card = styled(Link)`
   font-size: 1.25rem;
   text-align: center;
@@ -42,7 +35,6 @@ const Card = styled(Link)`
     }
   }
 `
-
 const Icon = styled(FontAwesomeIcon)`
   border: 2px solid ${({ theme }) => theme.secondary};
   border-radius: 50%;
@@ -51,7 +43,6 @@ const Icon = styled(FontAwesomeIcon)`
   width: 3rem;
   height: 3rem;
 `
-
 const Text = styled.p`
   font-weight: 600;
   line-height: 2rem;
@@ -59,33 +50,31 @@ const Text = styled.p`
 
 function Home() {
   return (
-    <VerifyLayout>
-      <Main>
-        <Card to='/managers'>
-          <Icon icon={faUserSecret} />
-          <Text>管理員</Text>
-        </Card>
-        <Card to='/group'>
-          <Icon icon={faUsers} />
-          <Text>群組管理</Text>
-        </Card>
-        <Card to='/stations'>
-          <Icon icon={faSolarPanel} />
-          <Text>案場管理</Text>
-        </Card>
-        <Card to='/bulletins'>
-          <Icon icon={faBullhorn} />
-          <Text>公告管理</Text>
-        </Card>
-        <Card to='/files'>
-          <Icon icon={faFolderClosed} />
-          <Text>檔案管理</Text>
-        </Card>
-        <Card to='/parameters'>
-          <Icon icon={faGears} />
-          <Text>參數設定</Text>
-        </Card>
-      </Main>
+    <VerifyLayout isClose={true}>
+      <Card to='/managers'>
+        <Icon icon={faUserSecret} />
+        <Text>管理員</Text>
+      </Card>
+      <Card to='/group'>
+        <Icon icon={faUsers} />
+        <Text>群組管理</Text>
+      </Card>
+      <Card to='/station'>
+        <Icon icon={faSolarPanel} />
+        <Text>案場管理</Text>
+      </Card>
+      <Card to='/bulletin'>
+        <Icon icon={faBullhorn} />
+        <Text>公告管理</Text>
+      </Card>
+      <Card to='/file'>
+        <Icon icon={faFolderClosed} />
+        <Text>檔案管理</Text>
+      </Card>
+      <Card to='/parameter'>
+        <Icon icon={faGears} />
+        <Text>參數設定</Text>
+      </Card>
     </VerifyLayout>
   )
 }

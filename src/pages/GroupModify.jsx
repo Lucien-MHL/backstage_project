@@ -21,16 +21,6 @@ import {
   clickUserDetail
 } from '../features/group/groupSlice.js'
 
-const Main = styled.main`
-  margin-top: 2rem;
-  padding: 1rem;
-  max-height: calc(100% - 64px - 2rem);
-  min-height: 232px;
-  border: 2px solid ${({ theme }) => theme.secondary};
-  border-radius: 1.5rem;
-  display: flex;
-  flex-direction: column;
-`
 const Header = styled.section`
   width: 100%;
   display: flex;
@@ -268,58 +258,56 @@ function GroupModify() {
   }
 
   return (
-    <VerifyLayout>
+    <VerifyLayout mainDisplay='flex'>
       {/* ↓ '修改群組' 或 '新增使用者' 的表單 */}
       {form}
       {/* ↑ '修改群組' 或 '新增使用者' 的表單 */}
 
-      <Main>
-        <Header>
-          <SearchBar onSubmit={(e) => e.preventDefault()}>
-            <SearchIcon icon={faMagnifyingGlass} />
-            <Input
-              type='text'
-              placeholder='輸入關鍵字...'
-              ref={keyword}
-              onChange={() => dispatch(modifySearch(keyword.current.value))}
-            />
-          </SearchBar>
-          <ButtonGroup>
-            <EditButton type='button' onClick={() => handleModal('Edit')}>
-              <EditIcon icon={faPen} />
-              修改群組
-            </EditButton>
-            <PlusButton type='button' onClick={() => handleModal('Plus')}>
-              <PlusIcon icon={faPlus} />
-              新增
-            </PlusButton>
-          </ButtonGroup>
-        </Header>
-        <Table>
-          <TableHeader>
-            <Title>名稱</Title>
-            <Title>帳號</Title>
-            <Title>內容</Title>
-          </TableHeader>
-          <TableBody>
-            {list?.map((item, index) => (
-              <List key={index} isDark={isDark}>
-                <Text>{item.name}</Text>
-                <Text>{item.account}</Text>
-                <Text>
-                  <Detail
-                    to={`${item.id}`}
-                    onClick={() => dispatch(clickUserDetail(item))}
-                  >
-                    <DetailIcon icon={faPenToSquare} />
-                    <Font>修改</Font>
-                  </Detail>
-                </Text>
-              </List>
-            ))}
-          </TableBody>
-        </Table>
-      </Main>
+      <Header>
+        <SearchBar onSubmit={(e) => e.preventDefault()}>
+          <SearchIcon icon={faMagnifyingGlass} />
+          <Input
+            type='text'
+            placeholder='輸入關鍵字...'
+            ref={keyword}
+            onChange={() => dispatch(modifySearch(keyword.current.value))}
+          />
+        </SearchBar>
+        <ButtonGroup>
+          <EditButton type='button' onClick={() => handleModal('Edit')}>
+            <EditIcon icon={faPen} />
+            修改群組
+          </EditButton>
+          <PlusButton type='button' onClick={() => handleModal('Plus')}>
+            <PlusIcon icon={faPlus} />
+            新增
+          </PlusButton>
+        </ButtonGroup>
+      </Header>
+      <Table>
+        <TableHeader>
+          <Title>名稱</Title>
+          <Title>帳號</Title>
+          <Title>內容</Title>
+        </TableHeader>
+        <TableBody>
+          {list?.map((item, index) => (
+            <List key={index} isDark={isDark}>
+              <Text>{item.name}</Text>
+              <Text>{item.account}</Text>
+              <Text>
+                <Detail
+                  to={`${item.id}`}
+                  onClick={() => dispatch(clickUserDetail(item))}
+                >
+                  <DetailIcon icon={faPenToSquare} />
+                  <Font>修改</Font>
+                </Detail>
+              </Text>
+            </List>
+          ))}
+        </TableBody>
+      </Table>
     </VerifyLayout>
   )
 }

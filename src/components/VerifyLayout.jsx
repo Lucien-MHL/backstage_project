@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { useLocation, useParams } from 'react-router-dom'
 import { verifyStart, selectVerifyResult } from '../features/verify/verifySlice'
 import Header from './Header.jsx'
@@ -11,8 +11,28 @@ const Layout = styled.div`
   margin: 0 auto;
   padding: 1.5rem 0.5rem;
 `
+const Main = styled.main`
+  display: flex;
+  ${({ isClose }) =>
+    !isClose
+      ? css`
+          margin-top: 2rem;
+          padding: ${({ padding }) => padding ?? '1rem'};
+          max-height: calc(100% - 64px - 2rem);
+          min-height: 232px;
+          border: 2px solid ${({ theme }) => theme.secondary};
+          border-radius: 1.5rem;
+          flex-direction: ${({ direction }) => direction ?? 'column'};
+        `
+      : css`
+          width: 100%;
+          gap: 1.75rem 4%;
+          margin-top: 2rem;
+          flex-wrap: wrap;
+        `}
+`
 
-export default function VerifyLayout({ children }) {
+export default function VerifyLayout({ children, isClose, padding, direction }) {
   // 使用 useLocation 獲取當前頁面的 url
   const { pathname } = useLocation()
   const props = useParams()
@@ -33,7 +53,9 @@ export default function VerifyLayout({ children }) {
   return (
     <Layout>
       <Header />
-      {children}
+      <Main isClose={isClose} padding={padding} direction={direction}>
+        {children}
+      </Main>
     </Layout>
   )
 }

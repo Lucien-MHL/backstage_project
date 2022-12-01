@@ -13,16 +13,6 @@ import {
 } from '../features/group/groupSlice'
 import FormForAddGroup from '../components/FormForAddGroup.jsx'
 
-const Main = styled.main`
-  margin-top: 2rem;
-  padding: 1rem;
-  max-height: calc(100% - 64px - 2rem);
-  min-height: 232px;
-  border: 2px solid ${({ theme }) => theme.secondary};
-  border-radius: 1.5rem;
-  display: flex;
-  flex-direction: column;
-`
 const Header = styled.article`
   width: 100%;
   display: flex;
@@ -189,49 +179,47 @@ function Group() {
   const keyword = useRef()
 
   return (
-    <VerifyLayout>
+    <VerifyLayout mainDisplay='flex'>
       {/* ↓ 新增群組的表單 */}
       <FormForAddGroup />
       {/* ↑ 新增群組的表單 */}
 
-      <Main>
-        <Header>
-          <SearchBar onSubmit={(e) => e.preventDefault()}>
-            <SearchIcon icon={faMagnifyingGlass} />
-            <Input
-              type='text'
-              placeholder='輸入關鍵字...'
-              ref={keyword}
-              onChange={() => dispatch(handleSearch(keyword.current.value))}
-            />
-          </SearchBar>
+      <Header>
+        <SearchBar onSubmit={(e) => e.preventDefault()}>
+          <SearchIcon icon={faMagnifyingGlass} />
+          <Input
+            type='text'
+            placeholder='輸入關鍵字...'
+            ref={keyword}
+            onChange={() => dispatch(handleSearch(keyword.current.value))}
+          />
+        </SearchBar>
 
-          <PlusButton onClick={() => dispatch(modalToggle())}>
-            <PlusIcon icon={faPlus} />
-            新增
-          </PlusButton>
-        </Header>
-        <Table>
-          <TableHeader>
-            <Title>群組照片</Title>
-            <Title>名稱</Title>
-          </TableHeader>
-          <TableBody>
-            {list?.map((item, index) => (
-              <List
-                key={index}
-                to={`${item.id}`}
-                onClick={() => dispatch(handleClickModify(item))}
-              >
-                <Logo>
-                  <Img src={item.photo} alt='company_logo' loading='lazy' />
-                </Logo>
-                <Text>{item.name}</Text>
-              </List>
-            ))}
-          </TableBody>
-        </Table>
-      </Main>
+        <PlusButton onClick={() => dispatch(modalToggle())}>
+          <PlusIcon icon={faPlus} />
+          新增
+        </PlusButton>
+      </Header>
+      <Table>
+        <TableHeader>
+          <Title>群組照片</Title>
+          <Title>名稱</Title>
+        </TableHeader>
+        <TableBody>
+          {list?.map((item, index) => (
+            <List
+              key={index}
+              to={`${item.id}`}
+              onClick={() => dispatch(handleClickModify(item))}
+            >
+              <Logo>
+                <Img src={item.photo} alt='company_logo' loading='lazy' />
+              </Logo>
+              <Text>{item.name}</Text>
+            </List>
+          ))}
+        </TableBody>
+      </Table>
     </VerifyLayout>
   )
 }

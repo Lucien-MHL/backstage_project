@@ -7,6 +7,7 @@ import verifyReducer from '../features/verify/verifySlice'
 import logoutReducer from '../features/logout/logoutSlice'
 import managerReducer from '../features/manager/managerSlice'
 import groupReducer from '../features/group/groupSlice'
+import stationReducer from '../features/station/stationSlice'
 
 const sagaMiddleware = createSagaMiddleware()
 
@@ -17,7 +18,8 @@ export const store = configureStore({
     logout: logoutReducer,
     verify: verifyReducer,
     manager: managerReducer,
-    group: groupReducer
+    group: groupReducer,
+    station: stationReducer
   },
   middleware: [sagaMiddleware]
 })

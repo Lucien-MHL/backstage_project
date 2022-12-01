@@ -8,16 +8,6 @@ import { selectIsDark } from '../features/switch/switchSlice.js'
 import { verifyStart } from '../features/verify/verifySlice.js'
 import UserComponent from '../components/UserComponent.jsx'
 
-const Main = styled.main`
-  margin-top: 2rem;
-  padding: 2rem 3rem;
-  padding-right: 0;
-  max-height: calc(100% - 64px - 2rem);
-  min-height: 232px;
-  border: 2px solid ${({ theme }) => theme.secondary};
-  border-radius: 1.5rem;
-  display: flex;
-`
 const Cover = styled.div`
   position: fixed;
   top: 0;
@@ -85,22 +75,20 @@ function UserModify() {
   }
 
   return (
-    <VerifyLayout>
-      <Main>
-        {isLoading && <Cover></Cover>}
-        <Nav>
-          {menu.map((li, index) => (
-            <List
-              key={index}
-              props={{ index, isDark, active }}
-              onClick={() => handleClick(index)}
-            >
-              {li}
-            </List>
-          ))}
-        </Nav>
-        {UserComponent[active]}
-      </Main>
+    <VerifyLayout padding='2rem 0 2rem 3rem' direction='row'>
+      {isLoading && <Cover></Cover>}
+      <Nav>
+        {menu.map((li, index) => (
+          <List
+            key={index}
+            props={{ index, isDark, active }}
+            onClick={() => handleClick(index)}
+          >
+            {li}
+          </List>
+        ))}
+      </Nav>
+      {UserComponent[active]}
     </VerifyLayout>
   )
 }

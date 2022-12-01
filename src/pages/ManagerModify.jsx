@@ -17,16 +17,6 @@ import {
 } from '../features/manager/managerSlice.js'
 import { selectIsDark } from '../features/switch/switchSlice.js'
 
-const Main = styled.main`
-  margin-top: 2rem;
-  padding: 2rem 3rem;
-  padding-right: 0;
-  max-height: calc(100% - 64px - 2rem);
-  min-height: 232px;
-  border: 2px solid ${({ theme }) => theme.secondary};
-  border-radius: 1.5rem;
-  display: flex;
-`
 const Cover = styled.div`
   position: fixed;
   top: 0;
@@ -178,92 +168,90 @@ function ManagerModify() {
   const msg = useSelector(selectMessage)
 
   return (
-    <VerifyLayout>
-      <Main>
-        {isLoading && <Cover></Cover>}
-        <Nav>
-          {menuList.map((li, index) => (
-            <List
-              key={index}
-              props={{ index, isDark, active }}
-              onClick={() => dispatch(switchModifyPage(index))}
-            >
-              {li}
-            </List>
-          ))}
-        </Nav>
-        {!active ? (
-          <Form
-            onSubmit={(e) => {
-              e.preventDefault()
-              dispatch(
-                modifyBasicInfoSubmit({
-                  formData: formData.current,
-                  mid: data.id
-                })
-              )
-            }}
-            ref={formData}
+    <VerifyLayout padding='2rem 0 2rem 3rem' direction='row'>
+      {isLoading && <Cover></Cover>}
+      <Nav>
+        {menuList.map((li, index) => (
+          <List
+            key={index}
+            props={{ index, isDark, active }}
+            onClick={() => dispatch(switchModifyPage(index))}
           >
-            <Field
-              name='name'
-              type='text'
-              placeholder='名稱'
-              defaultValue={data?.name}
-              required
-            />
-            <Field
-              name='account'
-              type='text'
-              placeholder='帳號'
-              defaultValue={data?.account}
-              required
-            />
-            <Field
-              name='email'
-              type='email'
-              placeholder='信箱'
-              defaultValue={data?.email}
-              required
-            />
-            <Button type='submit' disabled={isLoading}>
-              {isLoading ? (
-                <FontAwesomeIcon icon={faSpinner} pulse />
-              ) : (
-                <>
-                  <SaveIcon icon={faFloppyDisk} />
-                  儲存
-                </>
-              )}
-            </Button>
-          </Form>
-        ) : (
-          <PasswordForm
-            ref={passwordData}
-            onSubmit={(e) => {
-              e.preventDefault()
-              dispatch(
-                modifyPasswordSubmit({
-                  passwordData: passwordData.current,
-                  mid: data.id
-                })
-              )
-              e.target.children[0].value = ''
-            }}
-          >
-            <PasswordInput
-              type='password'
-              placeholder='輸入新的密碼'
-              required
-              isDark={isDark}
-            />
-            <PasswordButton type='submit'>
-              {isLoading ? <FontAwesomeIcon icon={faSpinner} pulse /> : '確認'}
-            </PasswordButton>
-            {msg && <MessageBox>{msg}</MessageBox>}
-          </PasswordForm>
-        )}
-      </Main>
+            {li}
+          </List>
+        ))}
+      </Nav>
+      {!active ? (
+        <Form
+          onSubmit={(e) => {
+            e.preventDefault()
+            dispatch(
+              modifyBasicInfoSubmit({
+                formData: formData.current,
+                mid: data.id
+              })
+            )
+          }}
+          ref={formData}
+        >
+          <Field
+            name='name'
+            type='text'
+            placeholder='名稱'
+            defaultValue={data?.name}
+            required
+          />
+          <Field
+            name='account'
+            type='text'
+            placeholder='帳號'
+            defaultValue={data?.account}
+            required
+          />
+          <Field
+            name='email'
+            type='email'
+            placeholder='信箱'
+            defaultValue={data?.email}
+            required
+          />
+          <Button type='submit' disabled={isLoading}>
+            {isLoading ? (
+              <FontAwesomeIcon icon={faSpinner} pulse />
+            ) : (
+              <>
+                <SaveIcon icon={faFloppyDisk} />
+                儲存
+              </>
+            )}
+          </Button>
+        </Form>
+      ) : (
+        <PasswordForm
+          ref={passwordData}
+          onSubmit={(e) => {
+            e.preventDefault()
+            dispatch(
+              modifyPasswordSubmit({
+                passwordData: passwordData.current,
+                mid: data.id
+              })
+            )
+            e.target.children[0].value = ''
+          }}
+        >
+          <PasswordInput
+            type='password'
+            placeholder='輸入新的密碼'
+            required
+            isDark={isDark}
+          />
+          <PasswordButton type='submit'>
+            {isLoading ? <FontAwesomeIcon icon={faSpinner} pulse /> : '確認'}
+          </PasswordButton>
+          {msg && <MessageBox>{msg}</MessageBox>}
+        </PasswordForm>
+      )}
     </VerifyLayout>
   )
 }

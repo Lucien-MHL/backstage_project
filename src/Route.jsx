@@ -7,6 +7,8 @@ import {
   Link
 } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { selectModifyData } from './features/manager/managerSlice'
+import { selectGroup, selectUserPageState } from './features/group/groupSlice'
 import Home from './pages/Home.jsx'
 import Login from './pages/Login.jsx'
 import Managers from './pages/Managers.jsx'
@@ -14,8 +16,7 @@ import ManagerModify from './pages/ManagerModify.jsx'
 import Group from './pages/Group.jsx'
 import GroupModify from './pages/GroupModify.jsx'
 import UserModify from './pages/UserModify.jsx'
-import { selectModifyData } from './features/manager/managerSlice'
-import { selectGroup, selectUserPageState } from './features/group/groupSlice'
+import Station from './pages/Station.jsx'
 
 function Routers() {
   const manager = useSelector(selectModifyData)
@@ -59,6 +60,12 @@ function Routers() {
               }}
             />
           </Route>
+        </Route>
+        <Route
+          path='station'
+          handle={{ crumb: () => <Link to='/station'>案場管理</Link> }}
+        >
+          <Route index element={<Station />} />
         </Route>
         <Route path='login' element={<Login />} />
       </Route>
