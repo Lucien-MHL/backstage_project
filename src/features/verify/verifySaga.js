@@ -2,6 +2,7 @@ import { call, put, takeEvery } from 'redux-saga/effects'
 import { verifyEnd } from './verifySlice'
 import { getManagerRes, getModifyRes } from '../manager/managerSlice'
 import { getGroupRes, getUsersOfGroupRes, UserGetEnd } from '../group/groupSlice'
+import { getStationRes } from '../station/stationSlice'
 
 function* verifyStart({ payload }) {
   try {
@@ -39,8 +40,11 @@ function* verifyStart({ payload }) {
         break
 
       case `/group/${payload.props.gid}/${payload.props.uid}`:
-        yield put(getUsersOfGroupRes(result))
         yield put(UserGetEnd(result))
+        break
+
+      case '/station':
+        yield put(getStationRes(result))
         break
 
       default:

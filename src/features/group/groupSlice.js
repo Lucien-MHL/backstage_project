@@ -61,7 +61,7 @@ const initialState = {
     dropMenu: {},
     photos: [
       { name: '個人圖像', key: 'logo' },
-      { name: '背景照片', key: 'bgcImg' }
+      { name: '背景照片', key: 'bgImg' }
     ]
   },
   isLoading: false
@@ -115,8 +115,9 @@ export const groupSlice = createSlice({
     },
     getUsersOfGroupRes: (state, { payload }) => {
       state.modifyPage.group = payload.result.group
-      state.modifyPage.usersOri = payload.result.users.models
-      state.modifyPage.usersMut = payload.result.users.models
+      state.modifyPage.usersOri = payload.result.users
+      state.modifyPage.usersMut = payload.result.users
+      state.groupPage.mutable = []
     },
     modifySearch: (state, { payload }) => {
       const regex = new RegExp(payload, 'i')
@@ -155,19 +156,21 @@ export const groupSlice = createSlice({
       }
     },
     changeAddUserForm: (state, { payload }) => {
-      state.userPlus.value = {
-        ...state.userPlus.value,
-        ...payload
-      }
+      state.userPlus.value = payload
+        ? {
+            ...state.userPlus.value,
+            ...payload
+          }
+        : {}
     },
     UserPostStart: (state) => {
       state.isLoading = true
     },
     UserPostEnd: (state, { payload }) => {
       state.isLoading = false
-      // state.modifyPage.formComponent = undefined
-      // state.modifyPage.usersMut = [payload.result, ...state.modifyPage.usersOri]
-      // state.userPlus = {}
+      state.modifyPage.formComponent = undefined
+      state.modifyPage.usersMut = [payload.result, ...state.modifyPage.usersOri]
+      state.userPlus = { ...state.userPlus, action: null, value: {} }
     },
     clickUserDetail: ({ userModify }, { payload }) => {
       userModify.user = { ...userModify.user, ...payload }

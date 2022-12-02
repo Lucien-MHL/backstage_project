@@ -3,6 +3,7 @@ import { Buffer } from 'buffer'
 import { faker } from '@faker-js/faker'
 import { nameList } from '../fakeLists/managersList'
 import { groupList } from '../fakeLists/groupList'
+import { stationList } from '../fakeLists/stationList'
 
 // 隨機正整數範圍產生器
 function randomNumber(min, max) {
@@ -29,8 +30,8 @@ export function makeServer({ environment = 'test' } = {}) {
     models: {
       manager: Model,
       group: Model.extend({
-        users: hasMany(),
-        stations: hasMany()
+        users: hasMany()
+        // stations: hasMany()
       }),
       user: Model.extend({
         group: belongsTo()
@@ -78,6 +79,14 @@ export function makeServer({ environment = 'test' } = {}) {
         },
         bgcImg: () =>
           'https://dsegomspoc.azurewebsites.net/public/img/system-default-background.jpg'
+      }),
+
+      station: Factory.extend({
+        name: (i) => stationList[i].TWName,
+        photo: (i) => stationList[i].PSPhotoFileName,
+        id: (i) => stationList[i].ZoneID,
+        wattage: (i) => stationList[i].DCC,
+        uptime: (i) => stationList[i].OnlineDate
       })
     },
 
@@ -95,7 +104,8 @@ export function makeServer({ environment = 'test' } = {}) {
       // Schema of Group
       server.createList('group', groupList.length)
 
-      //Schema of Users
+      //Schema of Station
+      server.createList('station', stationList.length)
     },
 
     routes() {
@@ -178,7 +188,7 @@ export function makeServer({ environment = 'test' } = {}) {
             const group = schema.groups.find(gid)
             return {
               success: true,
-              result: { group, users: group.users },
+              result: { group, users: group.users.models },
               message: ''
             }
           } else {
@@ -213,28 +223,15 @@ export function makeServer({ environment = 'test' } = {}) {
 
       this.get('/station', (schema, request) => {
         try {
-          // const { gid, uid } = request.params
-          // const isVerify = checkIdentify(schema, request)
-          // if (isVerify) {
-          //   const group = schema.groups.find(gid)
-          //   return {
-          //     success: true,
-          //     result: {
-          //       group,
-          //       users: group.users.filter((item) => item.attrs.id === uid).models[0]
-          //     },
-          //     message: ''
-          //   }
-          // } else {
-          //   return new Response(401, {}, { success: false, message: '身分驗證有誤' })
-          // }
-          return {
-            success: true,
-            // result: {
-            //   group,
-            //   users: group.users.filter((item) => item.attrs.id === uid).models[0]
-            // },
-            message: ''
+          const isVerify = checkIdentify(schema, request)
+          if (isVerify) {
+            return {
+              success: true,
+              result: schema.stations.all(),
+              message: ''
+            }
+          } else {
+            return new Response(401, {}, { success: false, message: '身分驗證有誤' })
           }
         } catch (error) {
           return new Response(400, {}, { success: false, message: error.message })

@@ -102,6 +102,9 @@ const Input = styled.input`
     filter: ${(props) => (props.isDark ? 'invert(100%)' : 'invert(0%)')};
   }
 `
+const Placeholder = styled.p`
+  color: ${({ theme }) => theme.secondary + '5a'};
+`
 const Button = styled.button`
   width: 40%;
   background-color: ${({ theme }) => theme.secondary};
@@ -340,8 +343,8 @@ function BasicSetting() {
           htmlFor={e.name}
           onClick={() => dispatch(userFormMenuOpen(e.name))}
         >
-          {dropMenu[e.name].name}
-          <Input name={e.name} value={dropMenu[e.name].value} readOnly />
+          {dropMenu[e.name]?.name ?? <Placeholder>{e.placeholder}</Placeholder>}
+          <Input name={e.name} defaultValue={dropMenu[e.name]?.value} readOnly />
           <Optgroup menuName={e.name} activeName={action}>
             {e.option.map((item) => (
               <Option

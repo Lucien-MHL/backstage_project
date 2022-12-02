@@ -2,7 +2,11 @@ import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled, { css } from 'styled-components'
 import { useLocation, useParams } from 'react-router-dom'
-import { verifyStart, selectVerifyResult } from '../features/verify/verifySlice'
+import {
+  verifyStart,
+  selectVerifyResult,
+  selectVerifyLoading
+} from '../features/verify/verifySlice'
 import Header from './Header.jsx'
 
 const Layout = styled.div`
@@ -31,6 +35,15 @@ const Main = styled.main`
           flex-wrap: wrap;
         `}
 `
+const Cover = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99;
+  cursor: wait;
+`
 
 export default function VerifyLayout({ children, isClose, padding, direction }) {
   // 使用 useLocation 獲取當前頁面的 url
@@ -38,6 +51,8 @@ export default function VerifyLayout({ children, isClose, padding, direction }) 
   const props = useParams()
   const dispatch = useDispatch()
   const isAuth = useSelector(selectVerifyResult)
+  const isLoading = useSelector(selectVerifyLoading)
+
   const token = JSON.parse(window.sessionStorage.getItem('token'))
   useEffect(() => {
     if (token) {
@@ -52,6 +67,7 @@ export default function VerifyLayout({ children, isClose, padding, direction }) 
 
   return (
     <Layout>
+      {isLoading && <Cover />}
       <Header />
       <Main isClose={isClose} padding={padding} direction={direction}>
         {children}

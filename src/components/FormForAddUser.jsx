@@ -218,6 +218,7 @@ function FormForAddUser() {
   const thisForm = document.getElementById('form')
   const handleCancel = () => {
     dispatch(modalToggle())
+    dispatch(changeAddUserForm())
     thisForm?.reset()
   }
 

@@ -21,7 +21,7 @@ const AzureFetch = (url, data) =>
 function* groupPost({ payload }) {
   try {
     const url = '/api/group'
-    const AzureURL = '/api/Azure_Cloud/photos/groupPhotos'
+    const AzureURL = '/api/Azure_Cloud/photos/photo'
     const formData = new FormData(payload)
     let Response
 
