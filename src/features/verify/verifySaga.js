@@ -2,7 +2,7 @@ import { call, put, takeEvery } from 'redux-saga/effects'
 import { verifyEnd } from './verifySlice'
 import { getManagerRes, getModifyRes } from '../manager/managerSlice'
 import { getGroupRes, getUsersOfGroupRes, UserGetEnd } from '../group/groupSlice'
-import { getStationRes } from '../station/stationSlice'
+import { stationGetEnd } from '../station/stationSlice'
 
 function* verifyStart({ payload }) {
   try {
@@ -21,10 +21,9 @@ function* verifyStart({ payload }) {
         .then((json) => json)
     )
 
-    yield put(verifyEnd(result))
     switch (payload.pathname) {
       case '/managers':
-        yield put(getManagerRes(result.managersList))
+        yield put(getManagerRes(result))
         break
 
       case `/managers/${payload.props.mid}`:
@@ -32,7 +31,7 @@ function* verifyStart({ payload }) {
         break
 
       case '/group':
-        yield put(getGroupRes(result.groupList))
+        yield put(getGroupRes(result))
         break
 
       case `/group/${payload.props.gid}`:
@@ -44,12 +43,13 @@ function* verifyStart({ payload }) {
         break
 
       case '/station':
-        yield put(getStationRes(result))
+        yield put(stationGetEnd(result))
         break
 
       default:
         break
     }
+    yield put(verifyEnd(result))
   } catch (e) {
     console.log('ERROR:', e)
   }

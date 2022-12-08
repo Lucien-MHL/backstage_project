@@ -20,8 +20,7 @@ const managerSlice = createSlice({
   initialState,
   reducers: {
     getManagerRes: (state, { payload }) => {
-      state.managerList.original = [...payload]
-      state.managerList.mutable = [...payload]
+      state.managerList.original = state.managerList.mutable = payload.result
     },
     handleSubmit: (state) => {
       state.loading = true

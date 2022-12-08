@@ -3,7 +3,7 @@ import { Buffer } from 'buffer'
 import { faker } from '@faker-js/faker'
 import { nameList } from '../fakeLists/managersList'
 import { groupList } from '../fakeLists/groupList'
-import { stationList } from '../fakeLists/stationList'
+import { stationList, cityList } from '../fakeLists/stationList'
 
 // 隨機正整數範圍產生器
 function randomNumber(min, max) {
@@ -77,7 +77,7 @@ export function makeServer({ environment = 'test' } = {}) {
         identity: (i) => {
           return i === randomNumber(1, 10) ? 'leader' : 'member'
         },
-        bgcImg: () =>
+        bgImg: () =>
           'https://dsegomspoc.azurewebsites.net/public/img/system-default-background.jpg'
       }),
 
@@ -86,7 +86,11 @@ export function makeServer({ environment = 'test' } = {}) {
         photo: (i) => stationList[i].PSPhotoFileName,
         id: (i) => stationList[i].ZoneID,
         wattage: (i) => stationList[i].DCC,
-        uptime: (i) => stationList[i].OnlineDate
+        uptime: (i) => stationList[i].OnlineDate,
+        location: (i) => {
+          const obj = cityList[stationList[i].City - 1]
+          return obj ? obj.Value : stationList[i].City
+        }
       })
     },
 
@@ -133,7 +137,7 @@ export function makeServer({ environment = 'test' } = {}) {
           if (isVerify) {
             return {
               success: true,
-              managersList: schema.managers.all().models,
+              result: schema.managers.all().models,
               message: ''
             }
           } else {
@@ -169,7 +173,7 @@ export function makeServer({ environment = 'test' } = {}) {
           if (isVerify) {
             return {
               success: true,
-              groupList: schema.groups.all().models,
+              result: schema.groups.all().models,
               message: ''
             }
           } else {
@@ -224,10 +228,15 @@ export function makeServer({ environment = 'test' } = {}) {
       this.get('/station', (schema, request) => {
         try {
           const isVerify = checkIdentify(schema, request)
+          const stations = schema.stations.all().models
           if (isVerify) {
             return {
               success: true,
-              result: schema.stations.all(),
+              result: stations.map(({ name, id, location }) => ({
+                name,
+                id,
+                location
+              })),
               message: ''
             }
           } else {
@@ -248,8 +257,7 @@ export function makeServer({ environment = 'test' } = {}) {
           return {
             success: true,
             message: '成功',
-            token: manager.token,
-            userName: manager.name
+            token: manager.token
           }
         } else {
           return new Response(
@@ -316,6 +324,9 @@ export function makeServer({ environment = 'test' } = {}) {
           return {
             success: true,
             message: '',
+            // 創建一個 group 需要 { name, photo } 兩個屬性
+            // 其中 name 是使用者必填項目
+            // 其中 photo 是 optional，但儲存前要給予預設值
             result: schema.groups.create(attrs)
           }
         } catch (error) {
@@ -415,7 +426,7 @@ export function makeServer({ environment = 'test' } = {}) {
             success: true,
             result: {
               group: schema.groups.find(gid).update(attrs),
-              users: schema.groups.find(gid).users
+              users: schema.groups.find(gid).users.models
             },
             message: ''
           }

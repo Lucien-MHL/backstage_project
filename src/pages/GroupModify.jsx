@@ -1,18 +1,15 @@
 import React, { useRef } from 'react'
 import { Link } from 'react-router-dom'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import VerifyLayout from '../components/VerifyLayout.jsx'
 import FormForModifyGroup from '../components/FormForModifyGroup.jsx'
 import FormForAddUser from '../components/FormForAddUser.jsx'
 import { selectIsDark, modalToggle } from '../features/switch/switchSlice.js'
-import {
-  faMagnifyingGlass,
-  faPlus,
-  faPenToSquare,
-  faPen
-} from '@fortawesome/free-solid-svg-icons'
+import { faPenToSquare, faPen } from '@fortawesome/free-solid-svg-icons'
+import HeaderComponent from '../components/HeaderComponent.jsx'
+import HighLighter from '../components/HighLighter.jsx'
 import {
   selectUsersList,
   selectForm,
@@ -21,69 +18,6 @@ import {
   clickUserDetail
 } from '../features/group/groupSlice.js'
 
-const Header = styled.section`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 2rem;
-`
-const SearchBar = styled.form`
-  width: 300px;
-  border: 2px solid ${({ theme }) => theme.secondary};
-  border-radius: 25px;
-  position: relative;
-`
-const SearchIcon = styled(FontAwesomeIcon)`
-  width: 1.5rem;
-  height: 1.5rem;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 1rem;
-  margin: auto;
-`
-const Input = styled.input`
-  width: 100%;
-  border: none;
-  color: ${({ theme }) => theme.secondary};
-  background-color: transparent;
-  font-size: 1.15rem;
-  font-weight: 600;
-  letter-spacing: 0.15rem;
-  padding: 0.65rem 1rem;
-  padding-left: 3rem;
-  outline: none;
-
-  &::placeholder {
-    color: ${({ theme }) => theme.secondary};
-    opacity: 0.3;
-    font-weight: 600;
-  }
-`
-const ButtonGroup = styled.div`
-  display: flex;
-  gap: 1.5rem;
-`
-const PlusButton = styled.button`
-  background-color: transparent;
-  color: ${({ theme }) => theme.secondary};
-  border: 1.5px solid ${({ theme }) => theme.secondary};
-  border-radius: 1rem;
-  padding: 0.5rem;
-  font-size: 1.25rem;
-  cursor: pointer;
-
-  :hover {
-    color: ${({ theme }) => theme.primary};
-    background-color: ${({ theme }) => theme.secondary};
-    font-weight: 600;
-    transition: all 0.3s;
-  }
-`
-const PlusIcon = styled(FontAwesomeIcon)`
-  margin-right: 0.5rem;
-  pointer-events: none;
-`
 const EditButton = styled.button`
   background-color: ${({ theme }) => theme.modifyButton};
   color: #fff;
@@ -101,7 +35,12 @@ const EditButton = styled.button`
     border-bottom: none;
   }
 `
-const EditIcon = styled(PlusIcon)`
+const iconStyled = css`
+  margin-right: 0.5rem;
+  pointer-events: none;
+`
+const EditIcon = styled(FontAwesomeIcon)`
+  ${iconStyled}
   width: 1rem;
   padding-left: 0.25rem;
 `
@@ -201,14 +140,6 @@ const Text = styled(Title)`
   letter-spacing: 0.1rem;
   text-overflow: ellipsis;
   overflow: hidden;
-
-  :nth-child(2) {
-    width: 50%;
-  }
-
-  :nth-child(3) {
-    width: 10%;
-  }
 `
 const Detail = styled(Link)`
   color: ${({ theme }) => theme.secondary};
@@ -227,7 +158,8 @@ const Detail = styled(Link)`
     justify-content: center;
   }
 `
-const DetailIcon = styled(PlusIcon)`
+const DetailIcon = styled(FontAwesomeIcon)`
+  ${iconStyled}
   @media (max-width: 768px) {
     margin: 0;
   }
@@ -263,27 +195,17 @@ function GroupModify() {
       {form}
       {/* ↑ '修改群組' 或 '新增使用者' 的表單 */}
 
-      <Header>
-        <SearchBar onSubmit={(e) => e.preventDefault()}>
-          <SearchIcon icon={faMagnifyingGlass} />
-          <Input
-            type='text'
-            placeholder='輸入關鍵字...'
-            ref={keyword}
-            onChange={() => dispatch(modifySearch(keyword.current.value))}
-          />
-        </SearchBar>
-        <ButtonGroup>
-          <EditButton type='button' onClick={() => handleModal('Edit')}>
-            <EditIcon icon={faPen} />
-            修改群組
-          </EditButton>
-          <PlusButton type='button' onClick={() => handleModal('Plus')}>
-            <PlusIcon icon={faPlus} />
-            新增
-          </PlusButton>
-        </ButtonGroup>
-      </Header>
+      <HeaderComponent
+        searchBar={() => dispatch(modifySearch(keyword.current.value))}
+        searchRef={keyword}
+        plusButton={() => handleModal('Plus')}
+      >
+        <EditButton type='button' onClick={() => handleModal('Edit')}>
+          <EditIcon icon={faPen} />
+          修改群組
+        </EditButton>
+      </HeaderComponent>
+
       <Table>
         <TableHeader>
           <Title>名稱</Title>
@@ -293,8 +215,12 @@ function GroupModify() {
         <TableBody>
           {list?.map((item, index) => (
             <List key={index} isDark={isDark}>
-              <Text>{item.name}</Text>
-              <Text>{item.account}</Text>
+              <Text>
+                <HighLighter text={item.name} search={keyword.current?.value} />
+              </Text>
+              <Text>
+                <HighLighter text={item.account} search={keyword.current?.value} />
+              </Text>
               <Text>
                 <Detail
                   to={`${item.id}`}

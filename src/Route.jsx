@@ -29,7 +29,7 @@ function Routers() {
         <Route index element={<Home />} />
         <Route
           path='managers'
-          handle={{ crumb: () => <Link to='/managers'>管理員</Link> }}
+          handle={{ crumb: (data) => <Link to={data?.pathname}>管理員</Link> }}
         >
           <Route index element={<Managers />} />
           <Route

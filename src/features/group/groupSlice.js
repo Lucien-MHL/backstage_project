@@ -71,9 +71,8 @@ export const groupSlice = createSlice({
   name: 'group',
   initialState,
   reducers: {
-    getGroupRes: (state, { payload }) => {
-      state.groupPage.original = payload
-      state.groupPage.mutable = payload
+    getGroupRes: ({ groupPage }, { payload }) => {
+      groupPage.original = groupPage.mutable = payload.result
     },
     handleClickModify: ({ modifyPage }, { payload }) => {
       modifyPage.group = { ...modifyPage.group, ...payload }
@@ -141,7 +140,7 @@ export const groupSlice = createSlice({
     modifyGroupRes: (state, { payload }) => {
       state.isLoading = false
       state.modifyPage.group = payload.result.group
-      state.modifyPage.usersMut = payload.result.users.models
+      state.modifyPage.usersMut = payload.result.users
       state.modifyPage.formComponent = undefined
     },
     userFormMenuOpen: (state, { payload }) => {
@@ -176,7 +175,10 @@ export const groupSlice = createSlice({
       userModify.user = { ...userModify.user, ...payload }
       userModify.active = 0
     },
-    UserGetEnd: ({ userModify, userPlus }, { payload }) => {
+    UserGetEnd: ({ userModify, userPlus, modifyPage }, { payload }) => {
+      modifyPage.group = !modifyPage.group.hasOwnProperty('name')
+        ? payload.result.group
+        : modifyPage.group
       userModify.user = !userModify.user ? payload.result.users : userModify.user
       if (userModify.user) {
         const { user, photos } = userModify

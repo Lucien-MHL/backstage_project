@@ -2,27 +2,27 @@ export const stationList = [
   {
     PSPhotoFileName:
       'https://frontendstaticfile.blob.core.windows.net/station/20220623T113258-2017001.jpg',
-    PSWeatherArea: '5',
+    // PSWeatherArea: '5',
     ID: 1,
     CreateTime: '2020-12-04T14:02:10.207',
     CreateUser: 'DATA TRANS',
     UpdateTime: '2020-12-04T14:02:10.207',
     UpdateUser: 'dsegomadmin',
     TUVID: '17TP-A11O-RS3-OD0-001',
-    StationCate: 9,
-    InterFaceCode: 'dsegom-spoc',
+    StationCate: 9, //
+    InterFaceCode: 'dsegom-spoc', //資料來源
     TWName: '立法院',
-    ENName: 'Zhongshan Dist., Taipei',
-    JPName: 'こっかい',
+    // ENName: 'Zhongshan Dist., Taipei',
+    // JPName: 'こっかい',
     DCC: '99',
     Cate: '1',
     RATE: '6.067',
-    Currency: '',
-    Country: '1',
+    Currency: '', //
+    Country: '1', // 台灣、日本、中國
     City: '1',
     Address: '台北市中正區鎮江街2號',
-    LAT: '25.044582',
-    LGT: '121.521145',
+    LAT: '25.044582', // 緯度(沒有就空著)
+    LGT: '121.521145', // 經度(沒有就空著)
     COD: '2017-10-11T00:00:00',
     ZoneID: '2017001',
     IQ: 0,
@@ -1099,7 +1099,7 @@ export const stationList = [
     RATE: '4.4253',
     Currency: 'NT',
     Country: '1',
-    City: '',
+    City: '臺東縣',
     Address: '',
     LAT: '',
     LGT: '',
@@ -1131,7 +1131,7 @@ export const stationList = [
     TUVID: '',
     StationCate: 5,
     InterFaceCode: 'dsegom-spoc',
-    TWName: '禾亞-飛沙國中',
+    TWName: '大林_永漢(莊鴻都畜牧場)_1110307',
     ENName: '禾亞-飛沙國中',
     JPName: '禾亞-飛沙國中',
     DCC: '248.96',
@@ -1171,7 +1171,7 @@ export const stationList = [
     TUVID: '',
     StationCate: 5,
     InterFaceCode: 'dsegom-spoc',
-    TWName: '禾亞-桂林國小',
+    TWName: '嘉義太保市公有垃圾掩埋場一(地面型)',
     ENName: '禾亞-桂林國小',
     JPName: '禾亞-桂林國小',
     DCC: '80.32',
@@ -1318,5 +1318,96 @@ export const stationList = [
     CleanupCost: null,
     CustomerNumber: null,
     is_EmailServiceOn: null
+  }
+]
+
+export const cityList = [
+  {
+    Key: '1',
+    Value: '臺北市'
+  },
+  {
+    Key: '2',
+    Value: '新北市'
+  },
+  {
+    Key: '3',
+    Value: '桃園市'
+  },
+  {
+    Key: '4',
+    Value: '臺中市'
+  },
+  {
+    Key: '5',
+    Value: '臺南市'
+  },
+  {
+    Key: '6',
+    Value: '基隆市'
+  },
+  {
+    Key: '7',
+    Value: '新竹市'
+  },
+  {
+    Key: '8',
+    Value: '嘉義市'
+  },
+  {
+    Key: '9',
+    Value: '新竹縣'
+  },
+  {
+    Key: '10',
+    Value: '苗栗縣'
+  },
+  {
+    Key: '11',
+    Value: '彰化縣'
+  },
+  {
+    Key: '12',
+    Value: '南投縣'
+  },
+  {
+    Key: '13',
+    Value: '雲林縣'
+  },
+  {
+    Key: '14',
+    Value: '嘉義縣'
+  },
+  {
+    Key: '15',
+    Value: '屏東縣'
+  },
+  {
+    Key: '16',
+    Value: '宜蘭縣'
+  },
+  {
+    Key: '17',
+    Value: '花蓮縣'
+  },
+  {
+    Key: '18',
+    Value: '臺東縣'
+  },
+  {
+    Key: '19',
+    Value: '澎湖縣'
+  },
+  {
+    Key: '20',
+    Value: '金門縣'
+  },
+  {
+    Key: '21',
+    Value: '連江縣'
+  },
+  {
+    Key: '22',
+    Value: '高雄市'
   }
 ]

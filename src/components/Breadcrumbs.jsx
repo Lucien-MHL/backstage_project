@@ -43,7 +43,6 @@ function Breadcrumbs() {
   const crumbs = matches
     .filter((match) => Boolean(match.handle?.crumb))
     .map((match) => match.handle.crumb(match))
-
   return (
     <Crumbs>
       <Crumb>

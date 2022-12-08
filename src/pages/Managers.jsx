@@ -3,80 +3,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faMagnifyingGlass,
-  faPlus,
-  faPenToSquare
-} from '@fortawesome/free-solid-svg-icons'
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import { selectIsDark, modalToggle } from '../features/switch/switchSlice.js'
+import FormForAddManager from '../components/FormForAddManager.jsx'
+import VerifyLayout from '../components/VerifyLayout.jsx'
+import HeaderComponent from '../components/HeaderComponent.jsx'
+import HighLighter from '../components/HighLighter.jsx'
 import {
   selectList,
   searchFilter,
   handleClickModify
 } from '../features/manager/managerSlice.js'
-import { selectIsDark, modalToggle } from '../features/switch/switchSlice.js'
-import FormForAddManager from '../components/FormForAddManager.jsx'
-import VerifyLayout from '../components/VerifyLayout.jsx'
-import Modal from '../components/Modal.jsx'
 
-const Header = styled.article`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 2rem;
-`
-const SearchBar = styled.form`
-  width: 300px;
-  border: 2px solid ${({ theme }) => theme.secondary};
-  border-radius: 25px;
-  position: relative;
-`
-const SearchIcon = styled(FontAwesomeIcon)`
-  width: 1.5rem;
-  height: 1.5rem;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 1rem;
-  margin: auto;
-`
-const Input = styled.input`
-  width: 100%;
-  border: none;
-  color: ${({ theme }) => theme.secondary};
-  background-color: transparent;
-  font-size: 1.15rem;
-  font-weight: 600;
-  letter-spacing: 0.15rem;
-  padding: 0.65rem 1rem;
-  padding-left: 3rem;
-  outline: none;
-
-  &::placeholder {
-    color: ${({ theme }) => theme.secondary};
-    opacity: 0.3;
-    font-weight: 600;
-  }
-`
-const PlusButton = styled.button`
-  background-color: transparent;
-  color: ${({ theme }) => theme.secondary};
-  border: 1.5px solid ${({ theme }) => theme.secondary};
-  border-radius: 1rem;
-  padding: 0.5rem;
-  font-size: 1.25rem;
-  cursor: pointer;
-
-  :hover {
-    color: ${({ theme }) => theme.primary};
-    background-color: ${({ theme }) => theme.secondary};
-    font-weight: 600;
-    transition: all 0.3s;
-  }
-`
-const PlusIcon = styled(FontAwesomeIcon)`
-  margin-right: 0.5rem;
-  pointer-events: none;
-`
 const Table = styled.article`
   max-height: calc(100% - 49.458px - 2rem);
   min-height: 120px;
@@ -198,7 +136,10 @@ const Detail = styled(Link)`
     justify-content: center;
   }
 `
-const EditIcon = styled(PlusIcon)`
+const EditIcon = styled(FontAwesomeIcon)`
+  margin-right: 0.5rem;
+  pointer-events: none;
+
   @media (max-width: 768px) {
     margin: 0;
   }
@@ -218,6 +159,7 @@ function Managers() {
   const keyword = useRef()
 
   const handleSearch = () => dispatch(searchFilter(keyword.current.value))
+  const handlePlus = () => dispatch(modalToggle())
 
   return (
     <VerifyLayout>
@@ -225,22 +167,11 @@ function Managers() {
       <FormForAddManager />
       {/* ↑ 新增管理員的表單 */}
 
-      <Header>
-        <SearchBar onSubmit={(e) => e.preventDefault()}>
-          <SearchIcon icon={faMagnifyingGlass} />
-          <Input
-            type='text'
-            placeholder='輸入關鍵字...'
-            ref={keyword}
-            onChange={handleSearch}
-          />
-        </SearchBar>
-
-        <PlusButton onClick={() => dispatch(modalToggle())}>
-          <PlusIcon icon={faPlus} />
-          新增
-        </PlusButton>
-      </Header>
+      <HeaderComponent
+        searchBar={handleSearch}
+        searchRef={keyword}
+        plusButton={handlePlus}
+      />
       <Table>
         <TableHeader>
           <Title>名稱</Title>
@@ -251,9 +182,15 @@ function Managers() {
         <TableBody>
           {list?.map((item, index) => (
             <List key={index} isDark={isDark}>
-              <Text>{item.name}</Text>
-              <Text>{item.account}</Text>
-              <Text>{item.email}</Text>
+              <Text>
+                <HighLighter text={item.name} search={keyword.current.value} />
+              </Text>
+              <Text>
+                <HighLighter text={item.account} search={keyword.current.value} />
+              </Text>
+              <Text>
+                <HighLighter text={item.email} search={keyword.current.value} />
+              </Text>
               <Text>
                 <Detail
                   to={`${item.id}`}
