@@ -9,6 +9,7 @@ import {
 import { useSelector } from 'react-redux'
 import { selectModifyData } from './features/manager/managerSlice'
 import { selectGroup, selectUserPageState } from './features/group/groupSlice'
+import { selectStationModify } from './features/station/stationSlice'
 import Home from './pages/Home.jsx'
 import Login from './pages/Login.jsx'
 import Managers from './pages/Managers.jsx'
@@ -17,11 +18,13 @@ import Group from './pages/Group.jsx'
 import GroupModify from './pages/GroupModify.jsx'
 import UserModify from './pages/UserModify.jsx'
 import Station from './pages/Station.jsx'
+import StationModify from './pages/StationModify.jsx'
 
 function Routers() {
   const manager = useSelector(selectModifyData)
   const group = useSelector(selectGroup)
   const { user } = useSelector(selectUserPageState)
+  const { station } = useSelector(selectStationModify)
 
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -63,9 +66,16 @@ function Routers() {
         </Route>
         <Route
           path='station'
-          handle={{ crumb: () => <Link to='/station'>案場管理</Link> }}
+          handle={{ crumb: (data) => <Link to={data?.pathname}>案場管理</Link> }}
         >
           <Route index element={<Station />} />
+          <Route
+            path=':sid'
+            element={<StationModify />}
+            handle={{
+              crumb: (data) => <Link to={data?.pathname}>{station?.name}</Link>
+            }}
+          />
         </Route>
         <Route path='login' element={<Login />} />
       </Route>

@@ -54,10 +54,14 @@ const Cover = styled.div`
   cursor: progress;
 `
 
-function Modal({ children, isLoading }) {
+function Modal({ children, isLoading, invoke }) {
   const dispatch = useDispatch()
   const isOpen = useSelector(selectIsOpen)
   const isShake = useSelector(selectIsClick)
+  const handleClick = (e) => {
+    e.stopPropagation()
+    invoke()
+  }
 
   return (
     <Main
@@ -69,7 +73,7 @@ function Modal({ children, isLoading }) {
         }, 350)
       }}
     >
-      <Container shake={isShake} onClick={(e) => e.stopPropagation()}>
+      <Container shake={isShake} onClick={handleClick}>
         {isLoading && <Cover />}
         {children}
       </Container>

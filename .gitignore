@@ -2,6 +2,7 @@
 dist
 test.js
 *.md
+*.txt
 package-lock.json
 
 # Dependency directories

@@ -12,8 +12,6 @@ export const stationList = [
     StationCate: 9, //
     InterFaceCode: 'dsegom-spoc', //資料來源
     TWName: '立法院',
-    // ENName: 'Zhongshan Dist., Taipei',
-    // JPName: 'こっかい',
     DCC: '99',
     Cate: '1',
     RATE: '6.067',
@@ -1409,5 +1407,161 @@ export const cityList = [
   {
     Key: '22',
     Value: '高雄市'
+  }
+]
+
+export const countryList = [
+  { id: 'TW', name: '臺灣', key: '1' },
+  { id: 'CN', name: '中國', key: '2' },
+  { id: 'JP', name: '日本', key: '3' }
+]
+
+export const situationList = [
+  {
+    Key: 0,
+    Value: '在線'
+  },
+  {
+    Key: 2,
+    Value: '未上線'
+  },
+  {
+    Key: 1,
+    Value: '下線'
+  }
+]
+
+export const progressDemo = [
+  {
+    Key: 1,
+    Value: '現場'
+  },
+  {
+    Key: 2,
+    Value: '報告'
+  },
+  {
+    Key: 3,
+    Value: '審議'
+  },
+  {
+    Key: 4,
+    Value: '再評估'
+  },
+  {
+    Key: 5,
+    Value: '監控'
+  },
+  {
+    Key: 6,
+    Value: '維運'
+  },
+  {
+    Key: 7,
+    Value: '維運(匯轉)'
+  },
+  {
+    Key: 8,
+    Value: '維運(介接)'
+  },
+  {
+    Key: 9,
+    Value: '維運+監控'
+  },
+  {
+    Key: 10,
+    Value: '暫時不理'
+  },
+  {
+    Key: 12,
+    Value: '虛擬管理'
+  }
+]
+
+export const dataSourceList = [
+  {
+    Key: 'dsegom-spoc',
+    Value: '鼎日能源'
+  },
+  {
+    Key: 'SolarEdge',
+    Value: 'SolarEdge'
+  },
+  {
+    Key: 'SunEdge',
+    Value: 'SunEdge'
+  },
+  {
+    Key: 'URE',
+    Value: 'URE'
+  },
+  {
+    Key: '慧景',
+    Value: '慧景'
+  },
+  {
+    Key: 'virtual',
+    Value: 'virtual'
+  },
+  {
+    Key: 'virtual-IRAD',
+    Value: 'virtual-IRAD'
+  },
+  {
+    Key: 'Demo',
+    Value: 'Demo'
+  },
+  {
+    Key: 'AUO',
+    Value: '友達'
+  },
+  {
+    Key: 'Partition',
+    Value: '分拆案場'
+  },
+  {
+    Key: 'Test',
+    Value: '管理測試用案場'
+  },
+  {
+    Key: '慧景合併',
+    Value: '慧景合併'
+  }
+]
+
+export const applyList = [
+  {
+    Key: '1',
+    Value: '併網'
+  },
+  {
+    Key: '2',
+    Value: '自發自用'
+  }
+]
+
+export const typeList = [
+  {
+    Key: 'RoofTop',
+    Value: '屋頂型'
+  },
+  {
+    Key: 'GroundMount',
+    Value: '地面型'
+  },
+  {
+    Key: 'Floating',
+    Value: '水面型'
+  },
+  {
+    Key: 'Else',
+    Value: '未設定'
+  }
+]
+
+export const currencyList = [
+  {
+    Key: 'NT',
+    Value: '新台幣'
   }
 ]

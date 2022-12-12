@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import { faFileLines } from '@fortawesome/free-solid-svg-icons'
 import VerifyLayout from '../components/VerifyLayout.jsx'
 import HeaderComponent from '../components/HeaderComponent.jsx'
 import { selectIsDark, modalToggle } from '../features/switch/switchSlice.js'
 import {
   selectStation,
-  stationSearchKeyword
+  stationSearchKeyword,
+  clickDetail
 } from '../features/station/stationSlice.js'
 import FormForAddStation from '../components/FormForAddStation.jsx'
 import HighLighter from '../components/HighLighter.jsx'
@@ -177,24 +178,21 @@ function Station() {
           {station?.Mut?.map((item) => (
             <List key={item.id} isDark={isDark}>
               <Text>
-                <HighLighter text={item.id} search={station.searchText} />
+                <HighLighter text={item.id} search={keyword.current?.value} />
               </Text>
               <Text>
-                <HighLighter text={item.location} search={station.searchText} />
+                <HighLighter text={item.location} search={keyword.current?.value} />
               </Text>
               <Text>
-                <HighLighter text={item.name} search={station.searchText} />
+                <HighLighter text={item.name} search={keyword.current?.value} />
               </Text>
-              {/* <Text>{highLight(item.id)}</Text>
-              <Text>{highLight(item.location)}</Text>
-              <Text>{highLight(item.name)}</Text> */}
               <Text>
                 <Detail
                   to={`${item.id}`}
-                  // onClick={() => dispatch(clickUserDetail(item))}
+                  onClick={() => dispatch(clickDetail(item))}
                 >
-                  <DetailIcon icon={faPenToSquare} />
-                  <Font>修改</Font>
+                  <DetailIcon icon={faFileLines} />
+                  <Font>查看</Font>
                 </Detail>
               </Text>
             </List>

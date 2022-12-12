@@ -6,8 +6,8 @@ import { faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   modalToggle,
-  selectIsOpen,
-  selectIsDark
+  selectIsDark,
+  selectIsOpen
 } from '../features/switch/switchSlice'
 import {
   UserPostStart,
@@ -126,6 +126,7 @@ const Select = styled.label`
 `
 const Placeholder = styled.p`
   color: ${({ theme }) => theme.secondary + '5a'};
+  user-select: none;
 `
 const Input = styled.input`
   width: 85%;
@@ -147,13 +148,6 @@ const Input = styled.input`
 
   :focus ::placeholder {
     color: ${({ theme }) => theme.secondary};
-  }
-
-  :-webkit-autofill,
-  :-webkit-autofill:hover,
-  :-webkit-autofill:focus {
-    -webkit-text-fill-color: ${({ theme }) => theme.secondary};
-    transition: background-color 5000s ease-in-out 0s;
   }
 
   &::-ms-reveal {
@@ -206,10 +200,10 @@ const Button = styled.button`
 
 function FormForAddUser() {
   const dispatch = useDispatch()
-  const isOpen = useSelector(selectIsOpen)
   const isLoading = useSelector(selectIsLoading)
   const { env, action, value } = useSelector(selectUserPlusState)
   const isTheme = useSelector(selectIsDark)
+  const isOpen = useSelector(selectIsOpen)
   const { gid } = useParams()
 
   const formData = useRef()
@@ -219,13 +213,15 @@ function FormForAddUser() {
   const handleCancel = () => {
     dispatch(modalToggle())
     dispatch(changeAddUserForm())
+    // 關掉表單時，清除表單欄位的值
     thisForm?.reset()
   }
 
+  // 關掉表單時，清除表單欄位的值
   if (!isOpen) thisForm?.reset()
 
   return (
-    <Modal isLoading={isLoading}>
+    <Modal isLoading={isLoading} invoke={() => dispatch(userFormMenuOpen('close'))}>
       <Form
         onSubmit={(e) => {
           e.preventDefault()
@@ -261,7 +257,10 @@ function FormForAddUser() {
             {env.map((e) => (
               <Select
                 key={e.name}
-                onClick={() => dispatch(userFormMenuOpen(e.name))}
+                onClick={(event) => {
+                  dispatch(userFormMenuOpen(e.name))
+                  event.stopPropagation()
+                }}
                 htmlFor={e.name}
               >
                 {value[e.name]?.name ?? <Placeholder>{e.placeholder}</Placeholder>}

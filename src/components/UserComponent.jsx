@@ -91,13 +91,6 @@ const Input = styled.input`
     color: ${({ theme }) => theme.secondary};
   }
 
-  :-webkit-autofill,
-  :-webkit-autofill:hover,
-  :-webkit-autofill:focus {
-    -webkit-text-fill-color: ${({ theme }) => theme.secondary};
-    transition: background-color 5000s ease-in-out 0s;
-  }
-
   &::-ms-reveal {
     filter: ${(props) => (props.isDark ? 'invert(100%)' : 'invert(0%)')};
   }

@@ -83,13 +83,6 @@ const Input = styled.input`
   :focus ::placeholder {
     color: ${({ theme }) => theme.secondary};
   }
-
-  :-webkit-autofill,
-  :-webkit-autofill:hover,
-  :-webkit-autofill:focus {
-    -webkit-text-fill-color: ${({ theme }) => theme.primary};
-    transition: background-color 5000s ease-in-out 0s;
-  }
 `
 const Button = styled.button`
   width: 100%;
@@ -115,13 +108,11 @@ function FormForAddManager() {
   const isOpen = useSelector(selectIsOpen)
   const isLoading = useSelector(selectIsLoading)
   const formData = useRef()
-  const thisForm = document.getElementById('form')
+
   const handleCancel = () => {
     dispatch(modalToggle())
-    thisForm?.reset()
+    document.getElementById('form').reset()
   }
-
-  if (!isOpen) thisForm?.reset()
 
   return (
     <Modal isLoading={isLoading}>
@@ -129,6 +120,7 @@ function FormForAddManager() {
         onSubmit={(e) => {
           e.preventDefault()
           dispatch(handleSubmit(formData.current))
+          e.target.reset()
         }}
         ref={formData}
         id='form'

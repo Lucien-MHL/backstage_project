@@ -3,7 +3,17 @@ import { Buffer } from 'buffer'
 import { faker } from '@faker-js/faker'
 import { nameList } from '../fakeLists/managersList'
 import { groupList } from '../fakeLists/groupList'
-import { stationList, cityList } from '../fakeLists/stationList'
+import {
+  stationList,
+  cityList,
+  countryList,
+  situationList,
+  progressDemo,
+  dataSourceList,
+  applyList,
+  typeList,
+  currencyList
+} from '../fakeLists/stationList'
 
 // 隨機正整數範圍產生器
 function randomNumber(min, max) {
@@ -82,15 +92,62 @@ export function makeServer({ environment = 'test' } = {}) {
       }),
 
       station: Factory.extend({
+        id: (i) => stationList[i].ZoneID,
         name: (i) => stationList[i].TWName,
         photo: (i) => stationList[i].PSPhotoFileName,
-        id: (i) => stationList[i].ZoneID,
         wattage: (i) => stationList[i].DCC,
         uptime: (i) => stationList[i].OnlineDate,
+        country: (i) => {
+          const obj = countryList.find(({ key }) => key === stationList[i].Country)
+          return { id: obj?.id, name: obj?.name }
+        },
         location: (i) => {
           const obj = cityList[stationList[i].City - 1]
           return obj ? obj.Value : stationList[i].City
-        }
+        },
+        address: (i) => stationList[i].Address,
+        lat: (i) => stationList[i].LAT,
+        lon: (i) => stationList[i].LGT,
+        situation: (i) => {
+          const obj = situationList.find(
+            ({ Key }) => Key === stationList[i].Disabled
+          )
+          return { id: obj?.Key, name: obj?.Value }
+        },
+        progress: (i) => {
+          const obj = progressDemo.find(
+            ({ Key }) => Key === stationList[i].StationCate
+          )
+          return { id: obj?.Key, name: obj?.Value }
+        },
+        releaseDate: (i) => stationList[i].OnlineDate,
+        tuv: (i) => stationList[i].TUVID,
+        dataCode: (i) => stationList[i].InterFaceID,
+        dataSource: (i) => {
+          const obj = dataSourceList.find(
+            ({ Key }) => Key === stationList[i].InterFaceCode
+          )
+          return { id: obj?.Key, name: obj?.Value }
+        },
+        apply: (i) => {
+          const obj = applyList.find(({ Key }) => Key === stationList[i].Cate)
+          return { id: obj?.Key, name: obj?.Value }
+        },
+        rate: (i) => stationList[i].RATE,
+        type: (i) => {
+          const obj = typeList.find(({ Key }) => Key === stationList[i].FieldType)
+          return { id: obj.Key, name: obj.Value }
+        },
+        cod: (i) => stationList[i].COD,
+        currency: (i) =>
+          !stationList[i].Currency
+            ? stationList[i].Currency
+            : currencyList.find(({ Key }) => Key === stationList[i].Currency)?.Value,
+        notice: (i) => stationList[i].is_EmailServiceOn,
+        createdAt: (i) => stationList[i].CreateTime,
+        creator: (i) => stationList[i].CreateUser,
+        editedAt: (i) => stationList[i].UpdateTime,
+        editor: (i) => stationList[i].UpdateUser
       })
     },
 
@@ -228,15 +285,37 @@ export function makeServer({ environment = 'test' } = {}) {
       this.get('/station', (schema, request) => {
         try {
           const isVerify = checkIdentify(schema, request)
+          const groups = schema.groups.all().models
           const stations = schema.stations.all().models
           if (isVerify) {
             return {
               success: true,
-              result: stations.map(({ name, id, location }) => ({
-                name,
-                id,
-                location
-              })),
+              result: {
+                groups: groups.map(({ name, id }) => ({ name, id })),
+                stations: stations.map(({ name, id, location }) => ({
+                  name,
+                  id,
+                  location
+                }))
+              },
+              message: ''
+            }
+          } else {
+            return new Response(401, {}, { success: false, message: '身分驗證有誤' })
+          }
+        } catch (error) {
+          return new Response(400, {}, { success: false, message: error.message })
+        }
+      })
+
+      this.get('/station/:sid', (schema, request) => {
+        try {
+          const { sid } = request.params
+          if (checkIdentify(schema, request)) {
+            const station = schema.stations.find(sid)
+            return {
+              success: true,
+              result: station,
               message: ''
             }
           } else {
@@ -353,6 +432,21 @@ export function makeServer({ environment = 'test' } = {}) {
             success: true,
             message: '',
             result: schema.users.create(attrs)
+          }
+        } catch (error) {
+          return new Response(400, {}, { success: false, message: error.message })
+        }
+      })
+
+      this.post('/station', (schema, request) => {
+        try {
+          const { requestBody } = request
+          let attrs = JSON.parse(requestBody)
+
+          return {
+            success: true,
+            message: '',
+            result: schema.stations.create(attrs)
           }
         } catch (error) {
           return new Response(400, {}, { success: false, message: error.message })

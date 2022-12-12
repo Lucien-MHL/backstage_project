@@ -1,16 +1,52 @@
 import React, { useRef } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  modalToggle,
-  selectIsOpen,
-  selectIsDark
-} from '../features/switch/switchSlice'
+import { modalToggle, selectIsOpen } from '../features/switch/switchSlice'
 import Modal from './Modal.jsx'
-import { selectLoading } from '../features/station/stationSlice'
+import {
+  selectLoading,
+  selectStation,
+  selectGroupOpt,
+  selectAreaList,
+  selectAreaOpt,
+  dropMenuOpen,
+  postStationStart
+} from '../features/station/stationSlice'
 
+const iconBasicStyle = css`
+  font: var(--fa-font-solid);
+  width: 15%;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.55rem;
+`
+const labelBasicStyle = css`
+  display: flex;
+  width: 280px;
+  height: 45px;
+  margin: 1rem 0;
+  border-bottom: 1.5px solid ${({ theme }) => theme.secondary};
+`
+const scrollStyle = css`
+  /* width */
+  ::-webkit-scrollbar {
+    width: 1.5rem;
+    border-radius: 0.25rem;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.primary};
+    width: 0.5rem;
+    background-clip: padding-box;
+    border: 8px solid rgba(0, 0, 0, 0);
+    border-radius: 99rem;
+  }
+`
 const Cancel = styled(FontAwesomeIcon)`
   font-size: 1.5rem;
   position: absolute;
@@ -36,66 +72,41 @@ const Title = styled.h1`
   letter-spacing: 0.2rem;
   margin-bottom: 1rem;
 `
-const MainContent = styled.main`
-  width: 100%;
-  display: flex;
-  gap: 4rem;
-`
-const Side = styled.aside`
-  display: flex;
-  flex-direction: column;
-`
-const Name = styled.label`
-  display: flex;
+const ID = styled.label`
   align-items: center;
-  width: 280px;
-  height: 45px;
-  margin: 1rem 0;
-  border-bottom: 1.5px solid ${({ theme }) => theme.secondary};
+  ${labelBasicStyle}
 
   ::before {
-    content: '\f2bb';
-    font: var(--fa-font-solid);
-    width: 15%;
-    height: 45px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.55rem;
+    content: '\f129';
+    ${iconBasicStyle}
   }
 `
-const Account = styled(Name)`
+const Name = styled(ID)`
   ::before {
-    content: '\f007';
+    content: '\f5ba';
   }
 `
-const Password = styled(Name)`
-  ::before {
-    content: '\f023';
-  }
-`
-const Email = styled(Name)`
-  ::before {
-    content: '\f0e0';
-  }
-`
-const Select = styled.label`
+const Locate = styled.label`
+  ${labelBasicStyle}
   position: relative;
-  width: 260px;
-  height: 45px;
-  margin: 1rem 0;
   cursor: pointer;
   background-color: transparent;
   color: ${({ theme }) => theme.secondary};
-  border-bottom: 1.5px solid ${({ theme }) => theme.secondary};
   font-size: 1.25rem;
   font-weight: 600;
   text-align: center;
   line-height: 45px;
+  user-select: none;
+
+  ::before {
+    content: '\f3c5';
+    ${iconBasicStyle}
+    padding-right: 1rem;
+  }
 
   ::after {
     display: block;
-    content: '\f0d7';
+    content: '\f0da';
     font: var(--fa-font-solid);
     position: absolute;
     top: 0;
@@ -106,7 +117,7 @@ const Select = styled.label`
   }
 
   // 若設 display: none; 會導致 required 的功能失效
-  // 所以這裡才會設定透明
+  // 所以這裡要設定透明
   > input {
     opacity: 0;
     pointer-events: none;
@@ -117,8 +128,58 @@ const Select = styled.label`
     height: 100%;
   }
 `
+const Group = styled(Locate)`
+  ::before {
+    content: '\f5fd';
+  }
+`
 const Placeholder = styled.p`
+  text-align: start;
   color: ${({ theme }) => theme.secondary + '5a'};
+  user-select: none;
+`
+const Optgroup = styled.ul`
+  position: absolute;
+  z-index: 99;
+  left: 105%;
+  width: 100%;
+  height: 260px;
+  overflow-y: auto;
+  display: ${(props) => (props.isOpen ? 'flex' : 'none')};
+  flex-direction: column;
+  color: ${({ theme }) => theme.primary};
+  background-color: ${({ theme }) => theme.secondary};
+  font-weight: 600;
+  font-size: 1.15rem;
+  text-align: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  border-radius: 15px;
+  ${scrollStyle}
+`
+const GroupOptgroup = styled(Optgroup)`
+  width: max-content;
+  height: 345px;
+  bottom: 0.45rem;
+  text-align: start;
+  z-index: 99;
+`
+const Option = styled.li`
+  padding: 0.5rem;
+  margin-left: 0.5rem;
+  user-select: none;
+
+  :hover {
+    background-color: ${({ theme }) => theme.primary + '5f'};
+  }
+`
+const MultiOption = styled(Option)`
+  ::before {
+    content: '\f00c';
+    font: var(--fa-font-solid);
+    margin-right: 0.5rem;
+    opacity: ${({ isSelect }) => (isSelect ? '1' : '0.15')};
+  }
 `
 const Input = styled.input`
   width: 85%;
@@ -141,42 +202,6 @@ const Input = styled.input`
   :focus ::placeholder {
     color: ${({ theme }) => theme.secondary};
   }
-
-  :-webkit-autofill,
-  :-webkit-autofill:hover,
-  :-webkit-autofill:focus {
-    -webkit-text-fill-color: ${({ theme }) => theme.secondary};
-    transition: background-color 5000s ease-in-out 0s;
-  }
-
-  &::-ms-reveal {
-    filter: ${(props) => (props.isTheme ? 'invert(100%)' : 'invert(0%)')};
-  }
-`
-const Optgroup = styled.ul`
-  position: relative;
-  /* bottom: 2rem; */
-  z-index: 99;
-  width: 100%;
-  display: ${(props) => (props.menuName === props.activeName ? 'flex' : 'none')};
-  /* opacity: 0; */
-  flex-direction: column;
-  color: ${({ theme }) => theme.primary};
-  background-color: ${({ theme }) => theme.secondary};
-  font-weight: 600;
-  font-size: 1.15rem;
-  text-align: center;
-  gap: 0.5rem;
-  padding: 0.25rem 0;
-  margin-top: 0.75rem;
-  border-radius: 15px;
-`
-const Option = styled.li`
-  padding: 0.5rem;
-
-  :hover {
-    background-color: ${({ theme }) => theme.primary + '5f'};
-  }
 `
 const Button = styled.button`
   width: 260px;
@@ -195,13 +220,19 @@ const Button = styled.button`
   &:hover {
     scale: ${({ disabled }) => (disabled ? '1' : '1.05')};
   }
+
+  &:active {
+    scale: 0.9;
+  }
 `
 
 function FormForAddStation() {
   const dispatch = useDispatch()
-  const isOpen = useSelector(selectIsOpen)
-  const isTheme = useSelector(selectIsDark)
+  const isFormOpen = useSelector(selectIsOpen)
   const isLoading = useSelector(selectLoading)
+  const areaList = useSelector(selectAreaList)
+
+  const { groupList, placeholder, isOpen } = useSelector(selectStation)
 
   const formData = useRef()
 
@@ -209,72 +240,74 @@ function FormForAddStation() {
   const thisForm = document.getElementById('form')
   const handleCancel = () => {
     dispatch(modalToggle())
-    // dispatch(changeAddUserForm())
-    thisForm?.reset()
+    dispatch(selectAreaOpt(null))
+    dispatch(selectGroupOpt(false))
+    thisForm.reset()
   }
 
-  if (!isOpen) thisForm?.reset()
+  if (!isFormOpen) thisForm?.reset()
+
+  const clickLabel = (e, str) => {
+    e.stopPropagation()
+    dispatch(dropMenuOpen(str))
+  }
 
   return (
-    <Modal isLoading={isLoading}>
+    <Modal isLoading={isLoading} invoke={() => dispatch(dropMenuOpen(null))}>
       <Form
         onSubmit={(e) => {
           e.preventDefault()
-          dispatch()
+          dispatch(postStationStart({ formData, group: placeholder.group }))
         }}
         ref={formData}
         id='form'
       >
         <Cancel icon={faXmark} onClick={handleCancel} />
         <Title>新增案場</Title>
-        {/* <MainContent>
-          <Side>
-            <Name>
-              <Input required placeholder='名稱 (必填)' type='text' name='name' />
-            </Name>
-            <Account>
-              <Input required placeholder='帳號 (必填)' type='text' name='account' />
-            </Account>
-            <Password>
-              <Input
-                required
-                placeholder='密碼 (必填)'
-                type='password'
-                name='password'
-                isTheme={isTheme}
-              />
-            </Password>
-            <Email>
-              <Input placeholder='信箱' type='email' name='email' />
-            </Email>
-          </Side>
-          <Side>
-            {env.map((e) => (
-              <Select
-                key={e.name}
-                onClick={() => dispatch(userFormMenuOpen(e.name))}
-                htmlFor={e.name}
-              >
-                {value[e.name]?.name ?? <Placeholder>{e.placeholder}</Placeholder>}
-                <Input
-                  name={e.name}
-                  required={e.name === 'identity'}
-                  defaultValue={value[e.name]?.value}
-                />
-                <Optgroup menuName={e.name} activeName={action}>
-                  {e.option.map((item) => (
-                    <Option
-                      key={item.name}
-                      onClick={() => dispatch(changeAddUserForm({ [e.name]: item }))}
-                    >
-                      {item.name}
-                    </Option>
-                  ))}
-                </Optgroup>
-              </Select>
+        <ID>
+          <Input required placeholder='編號' type='text' name='id' />
+        </ID>
+        <Name>
+          <Input required placeholder='名稱' type='text' name='name' />
+        </Name>
+        <Locate onClick={(e) => clickLabel(e, 'location')} htmlFor='location'>
+          {placeholder.area ? (
+            placeholder.area
+          ) : (
+            <Placeholder>選擇縣市...</Placeholder>
+          )}
+
+          <Input required name='location' defaultValue={placeholder.area} />
+          <Optgroup isOpen={isOpen === 'location'}>
+            {areaList.map((item) => (
+              <Option key={item} onClick={() => dispatch(selectAreaOpt(item))}>
+                {item}
+              </Option>
             ))}
-          </Side>
-        </MainContent> */}
+          </Optgroup>
+        </Locate>
+        <Group onClick={(e) => clickLabel(e, 'group')} htmlFor='group'>
+          {placeholder.group?.length ? (
+            `已選 ${placeholder.group.length} 個群組`
+          ) : (
+            <Placeholder>選擇群組...</Placeholder>
+          )}
+          <Input required name='group' defaultValue={placeholder.group?.length} />
+          <GroupOptgroup
+            isOpen={isOpen === 'group'}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {groupList?.map(({ name, id, isActive }) => (
+              <MultiOption
+                key={id}
+                onClick={() => dispatch(selectGroupOpt(id))}
+                isSelect={isActive}
+              >
+                {name}
+              </MultiOption>
+            ))}
+          </GroupOptgroup>
+        </Group>
         <Button type='submit' disabled={isLoading}>
           {!isLoading ? '新增' : <FontAwesomeIcon icon={faSpinner} pulse />}
         </Button>
