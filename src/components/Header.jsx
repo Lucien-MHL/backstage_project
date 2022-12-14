@@ -57,7 +57,6 @@ function Header() {
         <Icon icon={faRightFromBracket} />
         登出
       </Logout>
-      <ThemeButton />
       {pathname !== '/' && <Breadcrumbs />}
     </HeaderSection>
   )

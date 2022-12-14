@@ -96,7 +96,6 @@ export function makeServer({ environment = 'test' } = {}) {
         name: (i) => stationList[i].TWName,
         photo: (i) => stationList[i].PSPhotoFileName,
         wattage: (i) => stationList[i].DCC,
-        uptime: (i) => stationList[i].OnlineDate,
         country: (i) => {
           const obj = countryList.find(({ key }) => key === stationList[i].Country)
           return { id: obj?.id, name: obj?.name }
@@ -108,19 +107,18 @@ export function makeServer({ environment = 'test' } = {}) {
         address: (i) => stationList[i].Address,
         lat: (i) => stationList[i].LAT,
         lon: (i) => stationList[i].LGT,
-        situation: (i) => {
-          const obj = situationList.find(
-            ({ Key }) => Key === stationList[i].Disabled
-          )
-          return { id: obj?.Key, name: obj?.Value }
-        },
+        situation: (i) =>
+          situationList.find(({ Key }) => Key === stationList[i].Disabled)?.Value,
         progress: (i) => {
           const obj = progressDemo.find(
             ({ Key }) => Key === stationList[i].StationCate
           )
           return { id: obj?.Key, name: obj?.Value }
         },
-        releaseDate: (i) => stationList[i].OnlineDate,
+        releaseDate: (i) =>
+          stationList[i].OnlineDate
+            ? stationList[i].OnlineDate.split('T')[0]
+            : stationList[i].OnlineDate,
         tuv: (i) => stationList[i].TUVID,
         dataCode: (i) => stationList[i].InterFaceID,
         dataSource: (i) => {
@@ -138,15 +136,22 @@ export function makeServer({ environment = 'test' } = {}) {
           const obj = typeList.find(({ Key }) => Key === stationList[i].FieldType)
           return { id: obj.Key, name: obj.Value }
         },
-        cod: (i) => stationList[i].COD,
+        cod: (i) =>
+          stationList[i].COD ? stationList[i].COD.split('T')[0] : stationList[i].COD,
         currency: (i) =>
           !stationList[i].Currency
             ? stationList[i].Currency
             : currencyList.find(({ Key }) => Key === stationList[i].Currency)?.Value,
         notice: (i) => stationList[i].is_EmailServiceOn,
-        createdAt: (i) => stationList[i].CreateTime,
+        createdAt: (i) =>
+          stationList[i].CreateTime
+            ? stationList[i].CreateTime.split('T')[0]
+            : stationList[i].CreateTime,
         creator: (i) => stationList[i].CreateUser,
-        editedAt: (i) => stationList[i].UpdateTime,
+        editedAt: (i) =>
+          stationList[i].UpdateTime
+            ? stationList[i].UpdateTime.split('T')[0]
+            : stationList[i].UpdateTime,
         editor: (i) => stationList[i].UpdateUser
       })
     },

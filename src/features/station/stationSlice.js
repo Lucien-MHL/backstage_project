@@ -8,7 +8,38 @@ const initialState = {
     placeholder: { area: null, group: null },
     isOpen: null
   },
-  stationModify: { station: {}, menu: ['案場資訊', '設備清單'], active: 0 },
+  stationModify: {
+    station: {},
+    stationFile: [
+      { key: 'id', name: 'Logger案場編碼' },
+      { key: 'name', name: '案場名稱' },
+      { key: 'country', name: '案場所在地(國家)' },
+      { key: 'location', name: '案場所在地(縣市)' },
+      { key: 'address', name: '案場所在地(地址)' },
+      { key: 'lat', name: '案場所在地(緯度)' },
+      { key: 'lon', name: '案場所在地(經度)' },
+      { key: 'situation', name: '案場狀態' },
+      { key: 'progress', name: '案場進程' },
+      { key: 'releaseDate', name: '案場上線時間' },
+      { key: 'notice', name: '案場事件通知' },
+      { key: 'tuv', name: 'TUV案場編碼(進案)' },
+      { key: 'wattage', name: '案場額定功率(KW)' },
+      { key: 'dataSource', name: '資料來源' },
+      { key: 'dataCode', name: '資料代碼' },
+      { key: 'apply', name: '應用類型' },
+      { key: 'rate', name: '躉售費率' },
+      { key: 'currency', name: '躉售幣別' },
+      { key: 'type', name: '案場類型' },
+      { key: 'cod', name: '台電併網日' },
+      { key: 'createdAt', name: '新增時間' },
+      { key: 'creator', name: '新增人員' },
+      { key: 'editedAt', name: '修改時間' },
+      { key: 'editor', name: '修改人員' }
+    ],
+    stationArr: [],
+    menu: ['案場資訊', '設備清單'],
+    active: 0
+  },
   device: { Ori: [], Mut: [] },
   deviceModify: { Ori: [], Mut: [] },
   isLoading: false,
@@ -90,12 +121,17 @@ const stationSlice = createSlice({
     // STATION >>> STATION MODIFY
     clickDetail: ({ stationModify }, { payload }) => {
       stationModify.station = payload
+      // stationModify.stationArr = Object.(payload)
     },
     // STATION MODIFY REDUCERS
     stationModifyGetEnd: ({ stationModify }, { payload }) => {
       const update = (objA, objB) => ({ ...objA, ...objB })
       stationModify.station = update(stationModify.station, payload.result)
-      console.table(payload.result)
+      stationModify.stationArr = stationModify.stationFile.map(({ key, name }) => ({
+        key,
+        name,
+        value: payload.result[key] ?? ''
+      }))
     },
     navBarClick: ({ stationModify }, { payload }) => {
       stationModify.active = payload

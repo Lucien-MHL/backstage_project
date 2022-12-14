@@ -183,13 +183,13 @@ function Managers() {
           {list?.map((item, index) => (
             <List key={index} isDark={isDark}>
               <Text>
-                <HighLighter text={item.name} search={keyword.current.value} />
+                <HighLighter text={item.name} search={keyword.current?.value} />
               </Text>
               <Text>
-                <HighLighter text={item.account} search={keyword.current.value} />
+                <HighLighter text={item.account} search={keyword.current?.value} />
               </Text>
               <Text>
-                <HighLighter text={item.email} search={keyword.current.value} />
+                <HighLighter text={item.email} search={keyword.current?.value} />
               </Text>
               <Text>
                 <Detail
