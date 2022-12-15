@@ -97,7 +97,10 @@ export function makeServer({ environment = 'test' } = {}) {
         photo: (i) => stationList[i].PSPhotoFileName,
         wattage: (i) => stationList[i].DCC,
         country: (i) => {
-          const obj = countryList.find(({ key }) => key === stationList[i].Country)
+          const obj = countryList.find(
+            ({ key, name }) =>
+              key === stationList[i].Country || name === stationList[i].Country
+          )
           return { id: obj?.id, name: obj?.name }
         },
         location: (i) => {
@@ -331,6 +334,22 @@ export function makeServer({ environment = 'test' } = {}) {
         }
       })
 
+      this.get('/bulletin', (schema, request) => {
+        try {
+          if (checkIdentify(schema, request)) {
+            return {
+              success: true,
+              // result: station,
+              message: ''
+            }
+          } else {
+            return new Response(401, {}, { success: false, message: '身分驗證有誤' })
+          }
+        } catch (error) {
+          return new Response(400, {}, { success: false, message: error.message })
+        }
+      })
+
       this.post('/login', (schema, request) => {
         const {
           requestBody: { account, password }
@@ -447,6 +466,8 @@ export function makeServer({ environment = 'test' } = {}) {
         try {
           const { requestBody } = request
           let attrs = JSON.parse(requestBody)
+          attrs.photo =
+            'https://frontendstaticfile.blob.core.windows.net/station/20220331T164215-2020027.jpeg'
 
           return {
             success: true,

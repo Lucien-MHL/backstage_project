@@ -37,7 +37,7 @@ const initialState = {
       { key: 'editor', name: '修改人員' }
     ],
     stationArr: [],
-    menu: ['案場資訊', '設備清單'],
+    menu: ['案場資訊', '設備清單', '平面圖', '合約管理', '案場歷程'],
     active: 0
   },
   device: { Ori: [], Mut: [] },

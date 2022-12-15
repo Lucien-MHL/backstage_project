@@ -19,6 +19,7 @@ import GroupModify from './pages/GroupModify.jsx'
 import UserModify from './pages/UserModify.jsx'
 import Station from './pages/Station.jsx'
 import StationModify from './pages/StationModify.jsx'
+import Bulletin from './pages/Bulletin.jsx'
 
 function Routers() {
   const manager = useSelector(selectModifyData)
@@ -76,6 +77,19 @@ function Routers() {
               crumb: (data) => <Link to={data?.pathname}>{station?.name}</Link>
             }}
           />
+        </Route>
+        <Route
+          path='bulletin'
+          handle={{ crumb: (data) => <Link to={data?.pathname}>公告管理</Link> }}
+        >
+          <Route index element={<Bulletin />} />
+          {/* <Route
+            path=':sid'
+            element={<BulletinModify />}
+            handle={{
+              crumb: (data) => <Link to={data?.pathname}>{bulletin?.name}</Link>
+            }}
+          /> */}
         </Route>
         <Route path='login' element={<Login />} />
       </Route>

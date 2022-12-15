@@ -13,20 +13,8 @@ import {
   navBarClick
 } from '../features/station/stationSlice.js'
 import FormForModifyStation from '../components/FormForModifyStation.jsx'
+import StationComponent from '../components/StationComponent.jsx'
 
-const scrollbar = css`
-  /* width */
-  ::-webkit-scrollbar {
-    width: 0.5rem;
-  }
-
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.secondary};
-    border-radius: 0.25rem;
-    opacity: 0;
-  }
-`
 const Cover = styled.div`
   position: fixed;
   top: 0;
@@ -77,100 +65,6 @@ const List = styled.li`
     }
   }
 `
-const EditButton = styled.button`
-  background-color: ${({ theme }) => theme.modifyButton};
-  color: #fff;
-  border-bottom: 4px solid ${({ theme }) => theme.modifyButtonBorder};
-  border-radius: 1rem;
-  padding: 0.5rem;
-  font-size: 1.25rem;
-  cursor: pointer;
-  width: max-content;
-  margin: 1.5rem auto;
-  user-select: none;
-
-  :hover {
-    opacity: 0.8;
-  }
-
-  :active {
-    border-bottom: none;
-    padding-bottom: 0.75rem;
-  }
-`
-const EditIcon = styled(FontAwesomeIcon)`
-  margin-right: 0.5rem;
-  pointer-events: none;
-  width: 1rem;
-  padding-left: 0.25rem;
-`
-const ScrollContainer = styled.article`
-  width: 74%;
-  overflow-y: hidden;
-  padding: 0 1.5rem;
-  overflow-y: overlay;
-  ${scrollbar}
-  position: relative;
-  text-align: center;
-
-  ::after {
-    content: '';
-    display: block;
-    position: sticky;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-      to top,
-      ${({ theme }) => theme.primary},
-      transparent
-    );
-    width: 100%;
-    height: 1.5rem;
-    pointer-events: none;
-  }
-`
-const StationProfile = styled.section`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: ${({ theme }) => theme.primary};
-  padding-bottom: 1rem;
-`
-const Photo = styled.img`
-  display: block;
-  width: 150px;
-  aspect-ratio: 4 / 3;
-  object-fit: contain;
-  border-radius: 25px;
-  pointer-events: none;
-`
-const Name = styled.p`
-  font-size: 1.75rem;
-  font-weight: bold;
-  margin-left: 1.5rem;
-`
-const Table = styled.table`
-  width: 100%;
-  margin-top: -1rem;
-`
-const TableBody = styled.tbody``
-const TableRow = styled.tr``
-const TableHead = styled.th`
-  text-align: start;
-  font-size: 1.35rem;
-  padding: 0.5rem;
-`
-const TableData = styled.td`
-  font-size: 1.25rem;
-  letter-spacing: 0.15rem;
-  padding-left: 1rem;
-  text-align: start;
-`
 
 function StationModify() {
   const dispatch = useDispatch()
@@ -201,33 +95,7 @@ function StationModify() {
           </List>
         ))}
       </Nav>
-      {
-        [
-          <ScrollContainer>
-            <StationProfile>
-              <Photo src={station.photo} alt={`${station.name}的案場照片`} />
-              <Name>{station.name}</Name>
-            </StationProfile>
-            <Table>
-              {stationArr
-                ?.filter((e, i) => i !== 1)
-                .map((item) => (
-                  <TableBody key={item.key}>
-                    <TableRow>
-                      <TableHead>{item.name}</TableHead>
-                      <TableData>{item.value.name ?? item.value}</TableData>
-                    </TableRow>
-                  </TableBody>
-                ))}
-            </Table>
-            <EditButton type='button' onClick={() => dispatch(modalToggle())}>
-              <EditIcon icon={faPen} />
-              修改案場
-            </EditButton>
-          </ScrollContainer>,
-          <div>Hello ha</div>
-        ][active]
-      }
+      {StationComponent[active]}
     </VerifyLayout>
   )
 }
