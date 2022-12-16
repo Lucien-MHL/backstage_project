@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 import { selectStationModify } from '../features/station/stationSlice'
 import { modalToggle } from '../features/switch/switchSlice'
+import Calendar from './Calendar.jsx'
 
 const scrollbar = css`
   /* width */
@@ -154,7 +155,11 @@ function FloorMap() {
 }
 
 function Contract() {
-  return <div>Contract</div>
+  return (
+    <div>
+      <Calendar />
+    </div>
+  )
 }
 
 function History() {

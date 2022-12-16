@@ -4,7 +4,15 @@ import verifySaga from '../features/verify/verifySaga'
 import managerSaga from '../features/manager/managerSaga'
 import groupSaga from '../features/group/groupSaga'
 import stationSaga from '../features/station/stationSaga'
+import bulletinSaga from '../features/bulletin/bulletinSaga'
 
 export default function* rootSaga() {
-  yield all([loginSaga(), verifySaga(), managerSaga(), groupSaga(), stationSaga()])
+  yield all([
+    loginSaga(),
+    verifySaga(),
+    managerSaga(),
+    groupSaga(),
+    stationSaga(),
+    bulletinSaga()
+  ])
 }

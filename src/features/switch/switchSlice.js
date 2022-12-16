@@ -5,7 +5,7 @@ const initialState = {
   isOpen: false,
   isModalClick: false,
   date: new Date(),
-  isDateOpen: false
+  isDateOpen: true
 }
 
 export const switchSlice = createSlice({

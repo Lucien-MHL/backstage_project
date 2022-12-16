@@ -1,6 +1,4 @@
 #cutom
-dist
-test.js
 *.md
 *.txt
 package-lock.json
