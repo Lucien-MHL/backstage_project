@@ -22,7 +22,7 @@ const config = {
     host: 'localhost',
     port: 7777,
     static: {
-      directory: path.join(__dirname, 'docs')
+      directory: path.join(__dirname, 'dist')
     },
     compress: true,
     historyApiFallback: true
