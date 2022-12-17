@@ -7,12 +7,15 @@ const Dotenv = require('dotenv-webpack')
 
 const isProduction = process.env.NODE_ENV == 'production'
 
-const stylesHandler = isProduction ? MiniCssExtractPlugin.loader : 'style-loader'
+const stylesHandler = isProduction
+  ? MiniCssExtractPlugin.loader
+  : 'style-loader'
 
 const config = {
   entry: './src/index.jsx',
   output: {
-    path: path.resolve(__dirname, 'docs')
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: 'https://lucien-mhl.github.io/backstage_project'
   },
   devServer: {
     open: true,
